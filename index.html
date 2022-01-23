@@ -2,78 +2,117 @@
 <html>
    
    <head>
-      <title>XZ 1005 search ver 1.005</title>
+      <title>XZ 1005 search ver 1.005.1</title>
   	    <style>
 			.big_font {
 			  font-size: 26px;
 			}
-	    </style>
+			td {
+			  border: 1px solid gray;
+			}
+			td.center {
+			  text-align: center;
+			}
+		</style>
 	    <script>
 			var wait_seconds_each_search = 15;
+			var total_search_count = 0;
 			var max_search_count = 100;
+			var search_keywords = [];
+			var search_websites = [];
 
 			function delay(ms) {
 			  return new Promise(resolve => setTimeout(resolve, ms));
 			}
 
-			function openWin(url) {
-			    try {
-			        var el1 = document.createElement('a');
-			        el1.setAttribute("target", "_blank");
-			        el1.setAttribute("id", "openWin");
-			        el1.setAttribute("href", url);
-			        document.body.appendChild(el1);
-			        document.getElementById("openWin").click();//点击事件
-			        document.body.removeChild(el1);
-			    }
-			    catch (e) {
-			        window.open(url);
-			    }
+			function initSearch() {
+			  search_keywords = document.querySelector('div.search_keywords').innerHTML.split(',');
+			  search_website_divs = document.querySelectorAll('div.search_websites');
+			  for (info of search_website_divs) {
+			    var strs = info.innerHTML.split('：');
+				search_websites.push({
+					name: strs[0],
+					url:strs[1]
+				});
+			  }
+			  var div_main = document.querySelector('table.main_content tbody');
+			  // Insert header.
+		      div_main.insertAdjacentHTML('beforeend', '<tr></tr>');
+			  var new_row = div_main.lastChild;
+		      new_row.insertAdjacentHTML('beforeend', '<td>关键字</td>');				
+		      for (search_website of search_websites) {
+			    new_row.insertAdjacentHTML('beforeend', '<td class="center">' + search_website['name'] + '</td>');				
+			  }
+			  
+    		  for (search_keyword of search_keywords) {
+			    div_main.insertAdjacentHTML('beforeend', '<tr></tr>');
+  			    new_row = div_main.lastChild;
+				new_row.insertAdjacentHTML('beforeend', '<td>' + search_keyword + '</td>');
+			    for (search_website of search_websites) {
+				  var cell_id = search_keyword + '_' + search_website['name'];
+				  new_row.insertAdjacentHTML('beforeend', '<td class="center" id='+ cell_id + '>0</td>');				
+				}
+			  }
+			  printTotalSearchCount();
+			}
+
+			function printTotalSearchCount() {
+			  var console_text = document.querySelector('p.console');
+			  console_text.innerHTML = '总共已搜索' + total_search_count.toString() + '次';
+			}
+
+			function printMessage(message) {
+			  var console_text = document.querySelector('p.console');
+			  console_text.innerHTML = message;
 			}
 
 			async function search() {
 			  document.querySelector("button.search").disabled = true;
-	          var search_keyword_lists = document.querySelectorAll('li.search_keywords');
-			  var keywords = [];
-			  for (keyword_li of search_keyword_lists) {
-			  	keywords.push(keyword_li.innerHTML)
-			  }
-			  var total_search_count = 0;
-			  var baidu_window = null;
-	    	  for (keyword of keywords) {
-	  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keyword);
-				weibo_window = window.open("https://s.weibo.com/weibo?q=" + keyword + "&rd=realtime&tw=realtime&Refer=weibo_realtime");
-				var console_text = document.querySelector('p.console');
-				total_search_count++;
-				console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索……';
-				await delay(wait_seconds_each_search * 1000);
-				if (baidu_window) {
-					baidu_window.close();
+	    	  for (search_keyword of search_keywords) {
+				var open_windows = [];
+				var wait_seconds = 0;
+  			    for (search_website of search_websites) {
+				  var url = search_website['url'].replace('肖战顺顺利利', search_keyword);
+	  		      open_windows.push(window.open(url));
+ 				  printMessage('正在' + search_website['name'] + '搜索' + search_keyword);
+				  total_search_count++;
+  				  var cell_id = search_keyword + '_' + search_website['name'];
+				  var search_count_cell = document.querySelector('#' + cell_id);
+				  var search_count = parseInt(search_count_cell.innerHTML) + 1;
+				  search_count_cell.innerHTML = search_count.toString();
+      			  printTotalSearchCount();
+  			      await delay(500);
+				  wait_seconds += 0.5;
+			    }
+			    await delay((wait_seconds_each_search - wait_seconds) * 1000);
+				for (var open_window of open_windows) {
+				  open_window.close();				
+    			  await delay(500);
 				}
-				if (weibo_window) {
-					weibo_window.close();
-				}
-				console_text.innerHTML = '第' + total_search_count.toString() + '次搜索完毕。等待';
+    			printTotalSearchCount();
 				await delay(1000);
 		      }
-	   		  console_text.innerHTML = '所有搜索完毕。';
+	   		  printMessage('所有搜索完毕。');
 			  document.querySelector("button.search").disabled = false;
 		    }
 	    </script>
    </head>
-   <body>
-	 <div class="row">
-		 <li class="search_keywords">肖战</li>
-		 <li class="search_keywords">肖战顾一野</li>
-		 <li class="search_keywords">王牌部队肖战</li>
-		 <li class="search_keywords">肖战王牌部队</li>
-		 <li class="search_keywords">肖战王牌部队顾一野</li>
-		 <li class="search_keywords">王牌部队肖战顾一野</li>
-		 <li class="search_keywords">顾一野的日记簿</li>
-		 <li class="search_keywords">肖战顾魏</li>
-		 <li class="search_keywords">肖战余生请多指教</li>
-		 <li class="search_keywords">余生请多指教肖战</li>
+   <body onload="initSearch()">
+	 <div>在手机上请用Chrome打开。请关闭弹出窗口拦截。</div>
+	 <br/>
+	 <div hidden>
+		 <!--请修改以下内容对搜索进行配置--->
+		 <div class="search_keywords" name="搜索关键字，英文逗号分隔">肖战,肖战顾一野,王牌部队肖战,肖战王牌部队,肖战王牌部队顾一野,王牌部队肖战顾一野,顾一野的日记簿,肖战顾魏,肖战余生请多指教,余生请多指教肖战,余生请多指教肖战顾魏</div>
+		 <div class="search_websites">百度：https://www.baidu.com/s?wd=肖战顺顺利利</div>
+		 <div class="search_websites">微博：https://s.weibo.com/weibo?q=肖战顺顺利利&rd=realtime&tw=realtime&Refer=weibo_realtime</div>
+		 <div class="search_websites">头条：https://so.toutiao.com/search?keyword=肖战顺顺利利</div>
+		 <div class="search_websites">微信：https://weixin.sogou.com/weixin?type=2&s_from=input&query=肖战顺顺利利</div>
+		 <div class="search_websites">抖音：https://www.douyin.com/search/肖战顺顺利利</div>
      </div>
+	 <table class="main_content" width="100%">
+        <tbody>
+		</tbody>
+	 </table>
 	 <br/>
 	 <div class="row">
 	     <div class="column">
