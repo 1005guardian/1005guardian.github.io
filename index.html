@@ -12,6 +12,7 @@
 		}
 
 		async function search() {
+		  document.querySelector("button.search").disabled = true;
 		  var cur_window = window.self;
           var search_keyword_lists = document.querySelectorAll('li.search_keywords');
 		  var keywords = [];
@@ -31,6 +32,7 @@
 			}
 	      }
    		  console_text.innerHTML = '搜索完毕';
+		  document.querySelector("button.search").disabled = false;
 	    }
     </script>
    </head>
@@ -45,7 +47,8 @@
 	 <li class="search_keywords">肖战顾魏</li>
 	 <li class="search_keywords">肖战余生请多指教</li>
 	 <li class="search_keywords">余生请多指教肖战</li>
-     <button type="button" onclick="search()">Search!</button>
+	 <br/>
+     <button type="button" onclick="search()" class='search'>开始搜索</button>
 	 <p class="console"></p>
    </body>
    
