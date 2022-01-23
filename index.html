@@ -2,7 +2,7 @@
 <html>
    
    <head>
-      <title>XZ 1005 search ver 1.0</title>
+      <title>XZ 1005 search ver 1.005</title>
   	    <style>
 			.big_font {
 			  font-size: 26px;
@@ -35,6 +35,7 @@
 					baidu_window.close();
 				}
 				console_text.innerHTML = '第' + total_search_count.toString() + '次搜索完毕。等待';
+				await delay(1000);
 		      }
 	   		  console_text.innerHTML = '所有搜索完毕。';
 			  document.querySelector("button.search").disabled = false;
