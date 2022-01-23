@@ -2,7 +2,7 @@
 <html>
    
    <head>
-      <title>XZ 1005 search ver 1.005</title>
+      <title>XZ 1005 search ver 1.0</title>
   	    <style>
 			.big_font {
 			  font-size: 26px;
@@ -29,13 +29,14 @@
 	  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keyword);
 				var console_text = document.querySelector('p.console');
 				total_search_count++;
-				console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索';
+				console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索……';
 				await delay(wait_seconds_each_search * 1000);
 				if (baidu_window) {
 					baidu_window.close();
 				}
+				console_text.innerHTML = '第' + total_search_count.toString() + '次搜索完毕。等待';
 		      }
-	   		  console_text.innerHTML = '搜索完毕';
+	   		  console_text.innerHTML = '所有搜索完毕。';
 			  document.querySelector("button.search").disabled = false;
 		    }
 	    </script>
