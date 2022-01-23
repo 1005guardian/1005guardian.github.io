@@ -12,14 +12,19 @@
 		}
 
 		async function search() {
+		  var cur_window = window.self;
           var search_keyword_lists = document.querySelectorAll('li.search_keywords');
 		  var keywords = [];
 		  for (keyword_li of search_keyword_lists) {
 		  	keywords.push(keyword_li.innerHTML)
 		  }
+		  var total_search_count = 0;
 		  var baidu_window = null;
     	  for (keyword of keywords) {
-  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keywords[0]);
+  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keyword);
+			cur_window.focus();
+			var console_text = document.querySelector('p.console');
+			console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索';
 			await delay(wait_seconds_each_search * 1000);
 			if (baidu_window) {
 				baidu_window.close();
@@ -40,6 +45,7 @@
 	 <li class="search_keywords">肖战余生请多指教</li>
 	 <li class="search_keywords">余生请多指教肖战</li>
      <button type="button" onclick="search()">Search!</button>
+	 <p class="console"></p>
    </body>
    
 </html>
