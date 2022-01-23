@@ -11,7 +11,7 @@
 		  return new Promise(resolve => setTimeout(resolve, ms));
 		}
 
-		function search() {
+		async function search() {
           var search_keyword_lists = document.querySelectorAll('li.search_keywords');
 		  var keywords = [];
 		  for (keyword_li of search_keyword_lists) {
