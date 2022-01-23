@@ -74,7 +74,7 @@
   			    for (search_website of search_websites) {
 				  var url = search_website['url'].replace('肖战顺顺利利', search_keyword);
 	  		      open_windows.push(window.open(url));
- 				  printMessage('正在' + search_website['name'] + '搜索' + search_keyword);
+ 				  printMessage('正在' + search_website['name'] + '搜索' + search_keyword + ':' + url);
 				  total_search_count++;
   				  var cell_id = search_keyword + '_' + search_website['name'];
 				  var search_count_cell = document.querySelector('#' + cell_id);
@@ -106,7 +106,7 @@
 		 <div class="search_websites">百度：https://www.baidu.com/s?wd=肖战顺顺利利</div>
 		 <div class="search_websites">微博：https://s.weibo.com/weibo?q=肖战顺顺利利&rd=realtime&tw=realtime&Refer=weibo_realtime</div>
 		 <div class="search_websites">头条：https://so.toutiao.com/search?keyword=肖战顺顺利利</div>
-		 <div class="search_websites">微信：https://weixin.sogou.com/weixin?type=2&s_from=input&query=肖战顺顺利利</div>
+		 <div class="search_websites">微信：http://duososo.com/se/s_weixin.php?k=肖战顺顺利利</div>
 		 <div class="search_websites">抖音：https://www.douyin.com/search/肖战顺顺利利</div>
      </div>
 	 <table class="main_content" width="100%">
