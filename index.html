@@ -6,17 +6,39 @@
     <script>
 		var wait_seconds_each_search = 15;
 		var max_search_count = 100;
-		var search_keywords = ['肖战', '肖战顾魏', '王牌部队肖战', '肖战顾一野', '肖战王牌部队', '肖战王牌部队顾一野', '王牌部队肖战顾一野', '顾一野的日记簿', '肖战余生请多指教', '余生请多指教肖战', '肖战顾魏' ];
+
+		function delay(ms) {
+		  return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
 		function search() {
-		  window.open("https://www.baidu.com/s?wd=" + search_keywords[0]);
-	    }
+          var search_keyword_lists = document.querySelectorAll('li.search_keywords');
+		  var keywords = [];
+		  for (keyword_li of search_keyword_lists) {
+		  	keywords.push(keyword_li.innerHTML)
+		  }
+		  var baidu_window = null;
+    	  for (keyword of keywords) {
+  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keywords[0]);
+			await delay(wait_seconds_each_search * 1000);
+			if (baidu_window) {
+				baidu_window.close();
+			}
+	      }
     </script>
    </head>
    <body>
+	 <li class="search_keywords">肖战</li>
+	 <li class="search_keywords">肖战顾一野</li>
+	 <li class="search_keywords">王牌部队肖战</li>
+	 <li class="search_keywords">肖战王牌部队</li>
+	 <li class="search_keywords">肖战王牌部队顾一野</li>
+	 <li class="search_keywords">王牌部队肖战顾一野</li>
+	 <li class="search_keywords">顾一野的日记簿</li>
+	 <li class="search_keywords">肖战顾魏</li>
+	 <li class="search_keywords">肖战余生请多指教</li>
+	 <li class="search_keywords">余生请多指教肖战</li>
      <button type="button" onclick="search()">Search!</button>
-     <iframe id = "baidu" width="100%" height="30%"></iframe>
-     <iframe id = "weibo" width="100%" height="30%"></iframe>
-     <iframe id = "sogou" width="100%" height="30%"></iframe>
    </body>
    
 </html>
