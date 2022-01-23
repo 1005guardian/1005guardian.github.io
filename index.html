@@ -2,39 +2,43 @@
 <html>
    
    <head>
-      <title>XZ 1005 search ver 1.0</title>
-    <script>
-		var wait_seconds_each_search = 15;
-		var max_search_count = 100;
-
-		function delay(ms) {
-		  return new Promise(resolve => setTimeout(resolve, ms));
-		}
-
-		async function search() {
-		  document.querySelector("button.search").disabled = true;
-          var search_keyword_lists = document.querySelectorAll('li.search_keywords');
-		  var keywords = [];
-		  for (keyword_li of search_keyword_lists) {
-		  	keywords.push(keyword_li.innerHTML)
-		  }
-		  var total_search_count = 0;
-		  var baidu_window = null;
-    	  for (keyword of keywords) {
-  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keyword);
-			baidu_window.blur();
-			var console_text = document.querySelector('p.console');
-			total_search_count++;
-			console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索';
-			await delay(wait_seconds_each_search * 1000);
-			if (baidu_window) {
-				baidu_window.close();
+      <title>XZ 1005 search ver 1.005</title>
+  	    <style>
+			.big_font {
+			  font-size: 26px;
 			}
-	      }
-   		  console_text.innerHTML = '搜索完毕';
-		  document.querySelector("button.search").disabled = false;
-	    }
-    </script>
+	    </style>
+	    <script>
+			var wait_seconds_each_search = 15;
+			var max_search_count = 100;
+
+			function delay(ms) {
+			  return new Promise(resolve => setTimeout(resolve, ms));
+			}
+
+			async function search() {
+			  document.querySelector("button.search").disabled = true;
+	          var search_keyword_lists = document.querySelectorAll('li.search_keywords');
+			  var keywords = [];
+			  for (keyword_li of search_keyword_lists) {
+			  	keywords.push(keyword_li.innerHTML)
+			  }
+			  var total_search_count = 0;
+			  var baidu_window = null;
+	    	  for (keyword of keywords) {
+	  		    baidu_window = window.open("https://www.baidu.com/s?wd=" + keyword);
+				var console_text = document.querySelector('p.console');
+				total_search_count++;
+				console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索';
+				await delay(wait_seconds_each_search * 1000);
+				if (baidu_window) {
+					baidu_window.close();
+				}
+		      }
+	   		  console_text.innerHTML = '搜索完毕';
+			  document.querySelector("button.search").disabled = false;
+		    }
+	    </script>
    </head>
    <body>
 	 <div class="row">
@@ -52,7 +56,7 @@
 	 <br/>
 	 <div class="row">
 	     <div class="column">
-			 <button type="button" onclick="search()" class='search'>开始搜索</button>
+			 <button type="button" onclick="search()" class='search big_font'>开始搜索</button>
 	     </div>
 		 <div>
 		   <p class="console"></p>
