@@ -12,10 +12,6 @@
 			var wait_seconds_each_search = 15;
 			var max_search_count = 100;
 
-            function scrollWindowToBottom(w) {
-              w.scrollTo(0, w.document.body.scrollHeight);            	
-            }
-
 			function delay(ms) {
 			  return new Promise(resolve => setTimeout(resolve, ms));
 			}
@@ -52,13 +48,9 @@
 				console_text.innerHTML = '正在进行第' + total_search_count.toString() + '次搜索……';
 				await delay(wait_seconds_each_search * 1000);
 				if (baidu_window) {
-					scrollWindowToBottom(baidu_window);
-					await delay(100);
 					baidu_window.close();
 				}
 				if (weibo_window) {
-					scrollWindowToBottom(weibo_window);
-					await delay(100);
 					weibo_window.close();
 				}
 				console_text.innerHTML = '第' + total_search_count.toString() + '次搜索完毕。等待';
