@@ -2,7 +2,7 @@
 <html>
    
    <head>
-      <title>XZ 1005 search ver 1.005.2</title>
+      <title>XZ 1005 search ver 1.005.3</title>
   	    <style>
 			.big_font {
 			  font-size: 26px;
@@ -20,6 +20,7 @@
 			var max_search_count = 100;
 			var search_keywords = [];
 			var search_websites = [];
+		    var open_windows = new Map();
 
 			function delay(ms) {
 			  return new Promise(resolve => setTimeout(resolve, ms));
@@ -69,26 +70,28 @@
 			async function search() {
 			  document.querySelector("button.search").disabled = true;
 	    	  for (search_keyword of search_keywords) {
-				var open_windows = [];
 				var wait_seconds = 0;
   			    for (search_website of search_websites) {
 				  var url = search_website['url'].replace('肖战顺顺利利', search_keyword);
-	  		      open_windows.push(window.open(url));
+				  var existing_window = open_windows.get(search_website['name']);
+				  if (existing_window) {
+					existing_window.location.replace(url);	
+				  } else {
+  				    existing_window = window.open(url);
+	  		        open_windows.set(search_website['name'], existing_window);
+					existing_window.opener.parent.focus();
+				  }
  				  printMessage('正在' + search_website['name'] + '搜索' + search_keyword + ':' + url);
 				  total_search_count++;
   				  var cell_id = search_keyword + '_' + search_website['name'];
 				  var search_count_cell = document.querySelector('#' + cell_id);
 				  var search_count = parseInt(search_count_cell.innerHTML) + 1;
 				  search_count_cell.innerHTML = search_count.toString();
-      			  printTotalSearchCount();
   			      await delay(500);
+      			  printTotalSearchCount();
 				  wait_seconds += 0.5;
 			    }
 			    await delay((wait_seconds_each_search - wait_seconds) * 1000);
-				for (var open_window of open_windows) {
-				  open_window.close();				
-    			  await delay(500);
-				}
     			printTotalSearchCount();
 				await delay(1000);
 		      }
