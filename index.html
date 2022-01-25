@@ -2,7 +2,7 @@
 <html>
    
    <head>
-      <title>Realtime Data Analysis ver 1.005.13</title>
+      <title>Realtime Data Analysis ver 1.005.15</title>
   	    <style>
 			* {
   			  font-size: 25px;
@@ -39,13 +39,21 @@
 			img {
 			  border: 1px solid #555;
 			}
+			.hidden_info {
+			  display: none;
+			}
 		</style>
 	    <script src="scripts/fetch.js"></script>
    </head>
-   <body onload="pV();">
+   <body onload="init1005();">
 	 <div>在手机上请用Chrome浏览器打开。使用如出现问题请看下方使用说明。</div>
-	 <div>各平台热点话题最新内容实时获取，每半分钟更新一次。获取内容仅用于平台推送模式分析研究，请勿商用！</div>
+	 <div>各平台热点话题最新内容实时获取，每<span class='fetch_interval_seconds'>30</span>秒更新一次。获取内容仅用于平台推送模式分析研究，请勿商用！</div>
 	 <br/>
+	 <div class='hidden_info'>
+	   <input type="number" class="total_runs_override">
+	   <button type="button" onclick="testKeywords();">test keywords</button>
+	   <br />
+     </div>
 	 <table class="main_content" width="100%">
         <tbody>
 		</tbody>
@@ -53,10 +61,11 @@
 	 <br/>
 	 <div class="row">
 	     <div class="column">
-			 <button type="button" onclick="pY();" class='search bbfont'>开始获取</button>
+			 <button type="button" onclick="fetch1005();" class='search bbfont'>开始获取</button>
 	     </div>
 		 <div>
 		   <p class="console"></p>
+		   <p class="hidden_info run_count"></p>
 		 </div>
 	 </div>
 	<div>
