@@ -2,7 +2,7 @@
 <html>
    
    <head>
-      <title>Q test ver 1.005.9</title>
+      <title>Q test ver 1.005.10</title>
   	    <style>
 			* {
   			  font-size: 25px;
@@ -54,10 +54,15 @@
 		  	window_id_prefix: 'q',
 		  	file_path: './qq_videos.txt',
 		  	video_urls: [],
-		  	max_seconds: 690,
+		  	max_seconds: 180,
 		  	windows_count: 6,
 		  	video_index: 0
 		  };
+		  var query_str = window.location.search;
+		  if (query_str.includes('m:')) {
+		  	var minutes = parseInt(query_str.substring(query_str.indexOf('m:') + 2));
+			qq_videos.max_seconds = 60 * minutes;
+		  }
 		</script>
   	    <script src="./fetch.js"></script>
    </head>
