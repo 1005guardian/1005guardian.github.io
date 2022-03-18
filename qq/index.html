@@ -2,7 +2,7 @@
 <html>
    
    <head>
-      <title>Q test ver 1.005.13</title>
+      <title>Q test ver 1.005.14</title>
   	    <style>
 			* {
   			  font-size: 25px;
@@ -62,6 +62,11 @@
 		  if (query_str.includes('m:')) {
 		  	var minutes = parseInt(query_str.substring(query_str.indexOf('m:') + 2));
 			qq_videos.max_seconds = 60 * minutes;
+		  }
+		  if (query_str.includes('w:')) {
+			var pos = query_str.indexOf('w:') + 2;
+		  	var windows_count = parseInt(query_str.substring(pos, pos + 1));
+			qq_videos.windows_count = windows_count;
 		  }
 		</script>
   	    <script src="./fetch.js"></script>
