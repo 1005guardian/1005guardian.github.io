@@ -14,9 +14,9 @@
     </script>
 </head>
 <body>
-    <py-env>
-        - simple-crypt
-    </py-env>
+    <py-config>
+      packages = ["simple-crypt"]
+    </py-config>
     <py-script>
 	from simplecrypt import encrypt, decrypt
 	from base64 import b64encode, b64decode
