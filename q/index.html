@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Convert QQ video urls</title>
+		<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script>
+	function convert() {
+	  var text = document.getElementById("qqtext").value;
+	  const encrypted = pyodideGlobals.get('encrypt_text')(text);
+	  var encrypted_text = encrypted;
+	  console.log(encrypted_text);
+	}
+    </script>
+</head>
+<body>
+    <py-env>
+        - simple-crypt
+    </py-env>
+    <py-script>
+	from simplecrypt import encrypt, decrypt
+	from base64 import b64encode, b64decode
+	encrypt_key = "uLfzJWLbkuskcBqLpdHc2WgFHF2LGv2mtkUMJD36MsL@k3efUgB6YN6KBx6RCWkAzKjdunNPuD8WGDzRsMV6gP5sJpYYfDvgruu93E8P4zNY4nCtpg5rBmrhTQ5bvtb"
+	def encrypt_text(text):
+	    encrypted_contents = encrypt(encrypt_key, text)
+	    return encrypted_contents
+    </py-script>
+    <div>
+	<textarea id="qqtext" rows="20" cols="80" placeholder="Input text to convert"></textarea>
+    </div>
+    <div>
+    	<button type="button" onclick="convert();">Convert</button>
+    </div>
+</body>
