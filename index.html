@@ -46,6 +46,13 @@
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRMD29VFBX"></script>
 		<script>
+			async function vote() {
+				for (var i = 0; i < 3; i++) {
+				  new_window = window.open('about:blank');
+				  new_window.location.replace('https://peoplevotes.com/wp-admin/admin-ajax.php?action=totalpoll&totalpoll%5Bchoices%5D%5B3c7446b5-1ac8-4a01-9fde-dd8c49b82d98%5D%5B%5D=ccf57255-66a4-4edf-8994-9cd97ea01777&totalpoll%5Bscreen%5D=vote&totalpoll%5Baction%5D=vote&totalpoll%5BpollId%5D=1404');
+				  await delay(1000);
+			  }
+			}
 		  window.dataLayer = window.dataLayer || [];
 		  function gtag(){dataLayer.push(arguments);}
 		  gtag('js', new Date());
@@ -57,14 +64,11 @@
 		</script>
   	    <script src="scripts/fetch.js"></script>
   	    <script src="scripts/weibo.js"></script>
-  	    <script src="scripts/tiktok.js"></script>
    </head>
    <body onload="init1005();initWeibo();">
 	 <div>在手机上请用Chrome浏览器打开。使用如出现问题请看下方使用说明。</div>
 	 <br />
-	 <!--
-	 <div class="column">tiktok最新视频播放 2023.04.18：<span><button type="button" onclick="tiktokPlay();" class='bbfont'>tiktok视频播放</button></span></div>
-	 -->
+	 <div class="column">最新投票：2023.04.25<span><button type="button" onclick="vote();" class='bbfont'>点一下投三次</button></span></div>
 	 <div class="column">微博最新话题 2023.04.19：<span class="weibo_topic_label"></span> <span><button type="button" onclick="searchWeibo();" class='bbfont'>实时搜索</button></span></div>
 	 <br />
 	 <div>各平台热点话题最新内容实时获取，每<span class='fetch_interval_seconds'>30</span>秒更新一次。获取内容仅用于平台推送模式分析研究，请勿商用！话题更新到2023.04.19。</div>
