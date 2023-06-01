@@ -66,6 +66,7 @@ function init1005() {
 	  return;
   }
   readVideos(qq_videos);
+	print_message('获取' + str(qq_videos.video_urls.length) + '个最新视频。')
 }
 
 function getWindowId(videos, i) {
