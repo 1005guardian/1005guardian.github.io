@@ -87,12 +87,12 @@ function printLastTimestamp() {
 }
 
 function printMessage(message) {
-  // var elms = document.querySelectorAll('p.console');
-  // if (!elms || elms.length == 0) {
-  // 	return;
-  // }
-  // var console_text = document.querySelector('p.console');
-  // console_text.innerHTML = message;
+  var elms = document.querySelectorAll('p.console');
+  if (!elms || elms.length == 0) {
+  	return;
+  }
+  var console_text = document.querySelector('p.console');
+  console_text.innerHTML = message;
 }
 
 var video_stop_times = {};
