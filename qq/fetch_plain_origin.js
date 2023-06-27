@@ -27,7 +27,10 @@ function readVideos(videos) {
 		if (allText) {
 			lines = allText.split("\n"); 
 			for(var line of lines){ 
-	  	      videos.video_urls = videos.video_urls.concat(line);
+				if(line.startsWith("#")) {
+					continue;
+				}
+	  	  videos.video_urls = videos.video_urls.concat(line);
 			}
 			videos.video_urls = videos.video_urls.filter(function(video_urls) {
 			  return video_urls && video_urls.includes('|');
@@ -170,7 +173,7 @@ function checkAndPlayVideo() {
 		}
 		video_windows_to_urls[windowId] = video_url;
 		existing_window.location.replace(video_url);	
-	    printMessage('打开：' + video_url);  	
+		printMessage('打开：' + video_url); 	
 		var video_stop_time = current_time.setSeconds(current_time.getSeconds() + video_length_seconds);
 		video_stop_times[windowId] = video_stop_time;
 		video_max_stop_times[windowId] =  current_time.setSeconds(current_time.getSeconds() + video_actual_length);
