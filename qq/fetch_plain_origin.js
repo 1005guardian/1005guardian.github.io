@@ -118,6 +118,8 @@ function printVideoPlayCounts() {
 }
 
 function checkAndPlayVideo() {
+	var found_video = false;
+	while (!found_video) {
 	parts = qq_videos.video_urls[qq_videos.video_index].split('|');
     video_url = parts[0];
     video_length_seconds = parts[1].split(':').reduce((acc, time) => (60 * acc) + +time);
@@ -128,8 +130,10 @@ function checkAndPlayVideo() {
     video_is_vip = parts[2] == 'v';
     if (video_is_vip && !play_vip) {
 	  qq_videos.video_index = (qq_videos.video_index + 1) % qq_videos.video_urls.length;
-   	  return;
+    } else {
+    	found_video = true;
     }
+	}
 	// Clean up overdue windows.
 	for (var i = 0; i < qq_videos.windows_count; i++) {
   	  var windowId = getWindowId(qq_videos, i);
@@ -158,7 +162,7 @@ function checkAndPlayVideo() {
 		video_stop_times[windowId] = video_stop_time;
 		video_max_stop_times[windowId] = current_time.setSeconds(current_time.getSeconds() + video_actual_length);
 		qq_videos.video_index = (qq_videos.video_index + 1) % qq_videos.video_urls.length;
-		return;
+		return true;
 	  } else if (!window_stop_time || current_time.getTime() >= window_stop_time) {
 		var prev_url = video_windows_to_urls[windowId];
 		if (prev_url) {
@@ -178,9 +182,10 @@ function checkAndPlayVideo() {
 		video_stop_times[windowId] = video_stop_time;
 		video_max_stop_times[windowId] =  current_time.setSeconds(current_time.getSeconds() + video_actual_length);
 		qq_videos.video_index = (qq_videos.video_index + 1) % qq_videos.video_urls.length;
-		return;
+		return true;
 	  }
 	}
+	return true;
 }
 
 async function fetch1005(should_play_vip) {
@@ -192,7 +197,7 @@ async function fetch1005(should_play_vip) {
 	qq_videos.max_seconds += 90;
   }
   if (qq_videos.video_urls.length > 0 && !intervalID) {
-	checkAndPlayVideo();
+	  checkAndPlayVideo();
     intervalID = setInterval(checkAndPlayVideo, 4000);
   }
 }
