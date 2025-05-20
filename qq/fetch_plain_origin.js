@@ -69,7 +69,7 @@ function init1005() {
 	  return;
   }
   readVideos(qq_videos);
-	printMessage('获取' + qq_videos.video_urls.length.toString() + '个最新视频。')
+	printMessage('获取' + qq_videos.video_urls.length.toString() + '个最新视频。窗口数：' + qq_videos.windows_count + '。每次最多播放：' + qq_videos.max_seconds/60 + '分钟')
 }
 
 function getWindowId(videos, i) {
