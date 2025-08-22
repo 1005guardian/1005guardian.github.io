@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Text Encryptor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-2xl mx-auto p-6 md:p-8 bg-gray-800 rounded-2xl shadow-2xl">
+        <div class="text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">文本加密</h1>
+            <p class="text-gray-400 mb-6">请贴入要加密的原文本：</p>
+        </div>
+
+        <!-- Input Text Area -->
+        <div class="mb-4">
+            <label for="text-input" class="sr-only">Enter text to encrypt</label>
+            <textarea id="text-input" rows="10" class="w-full p-4 bg-gray-700 border-2 border-gray-600 rounded-lg text-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300" placeholder="粘贴需要加密的原文本"></textarea>
+        </div>
+
+        <!-- Encrypt Button -->
+        <button id="encrypt-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+            把加密文本复制到剪贴板
+        </button>
+
+        <!-- Encrypted Output Area -->
+        <div class="mt-6">
+            <label for="output-text" class="block text-sm font-medium text-gray-400 mb-2">加密文本:</label>
+            <textarea id="output-text" rows="10" class="w-full p-4 bg-gray-900 border-2 border-gray-600 rounded-lg text-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 cursor-not-allowed" readonly placeholder="Your encrypted text will appear here..."></textarea>
+        </div>
+
+        <!-- Notification for clipboard copy -->
+        <div id="notification" class="fixed bottom-10 right-10 bg-green-500 text-white py-2 px-5 rounded-lg shadow-lg text-sm transition-opacity duration-300 opacity-0">
+            加密文本已经复制到粘贴板。
+        </div>
+    </div>
+
+    <script>
+        const textInput = document.getElementById('text-input');
+        const encryptBtn = document.getElementById('encrypt-btn');
+        const notification = document.getElementById('notification');
+        const outputText = document.getElementById('output-text');
+
+        /**
+         * Encrypts a string based on a simple character shift algorithm.
+         * - Alphabets are shifted forward by one (z -> a, Z -> A).
+         * - Numbers are shifted forward by one (9 -> 0).
+         * - All other characters remain unchanged.
+         * @param {string} str The string to encrypt.
+         * @returns {string} The encrypted string.
+         */
+        function encryptString(str) {
+            let encrypted = '';
+            for (let i = 0; i < str.length; i++) {
+                const char = str[i];
+                const charCode = str.charCodeAt(i);
+
+                if (char >= 'a' && char <= 'z') {
+                    // Handle lowercase letters
+                    encrypted += (char === 'z') ? 'a' : String.fromCharCode(charCode + 1);
+                } else if (char >= 'A' && char <= 'Z') {
+                    // Handle uppercase letters
+                    encrypted += (char === 'Z') ? 'A' : String.fromCharCode(charCode + 1);
+                } else if (char >= '0' && char <= '9') {
+                    // Handle numbers
+                    encrypted += (char === '9') ? '0' : String.fromCharCode(charCode + 1);
+                } else if (charCode >= 0x4E00 && charCode <= 0x9FFF) {
+                    // Handle common CJK Unified Ideographs (Chinese characters)
+                    // We shift the Unicode code point by 1, wrapping around at the end of the block.
+                    encrypted += (charCode === 0x9FFF) ? String.fromCharCode(0x4E00) : String.fromCharCode(charCode + 1);
+                }
+                else {
+                    // Keep all other characters the same
+                    encrypted += char;
+                }
+            }
+            return encrypted;
+        }
+
+        /**
+         * Copies the given text to the user's clipboard.
+         * Creates a temporary textarea element to perform the copy command.
+         * @param {string} text The text to copy.
+         */
+        function copyToClipboard(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                // Use execCommand for broader browser support, especially in iFrames
+                document.execCommand('copy');
+                showNotification();
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        /**
+         * Displays a notification and fades it out after a delay.
+         */
+        function showNotification() {
+            notification.classList.remove('opacity-0');
+            setTimeout(() => {
+                notification.classList.add('opacity-0');
+            }, 2000); // Notification is visible for 2 seconds
+        }
+
+        // Event listener for the button click
+        encryptBtn.addEventListener('click', () => {
+            const originalText = textInput.value;
+            if (originalText) {
+                const encryptedText = encryptString(originalText);
+                outputText.value = encryptedText;
+                copyToClipboard(encryptedText);
+            } else {
+                // Clear the output if the input is empty
+                outputText.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
