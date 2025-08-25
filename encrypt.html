@@ -47,42 +47,77 @@
         const encryptBtn = document.getElementById('encrypt-btn');
         const notification = document.getElementById('notification');
         const outputText = document.getElementById('output-text');
+        const s1 = "除草毒烈扰犯文荐禁无识案软法意动控互信票知恶个企低引集频度非战络史违年谩主骂辱内害泄物隐不俗击冒民踩力刀攻兼问成伤爆假善族腥诉品宗虚虐私诈圈义未时股答教料良骚招盒诱或题投考应视评试导卖拉为援有友我仿权黄论开邪博蹭人饭谣刷价侵身恐专杀露情赌图挂枪网嫖资募侮血骗历造垃流益色务他转产涉量其英行容区热言息暴证政职圾发售规0123456789AXvqT";
+        const s2 = "吃菜诚够常欲沿世经跳次个响恳程强碰迈化谎起啊算就尽他场定那小得飞送给乘一平翱以会许有往重学意倔无由花央我宕失人真开地的比量翅说活不看向知么没让望过目样气声可逆更是能睡理状步前最好怎在莽去成明而回已如稳野了残走摇大来方忍早带展伏也心每触反原惯出跌伤风撞浪摸类败光返退习张道要这肆涌晃们着文始长论等只都中汹璞归纯翔形生~@%^#)(&$!105xz";
 
         /**
-         * Encrypts a string based on a simple character shift algorithm.
-         * - Alphabets are shifted forward by one (z -> a, Z -> A).
-         * - Numbers are shifted forward by one (9 -> 0).
-         * - All other characters remain unchanged.
-         * @param {string} str The string to encrypt.
+         * Encrypts a text string using a substitution cipher defined by two key strings.
+         *
+         * Each character in the input text that is found in s1 is replaced by the
+         * character at the same position in s2. Characters not in s1 are unchanged.
+         *
+         * For performance-critical applications, consider creating and caching the mapping
+         * Map object externally.
+         *
+         * @param {string} text The string to encrypt.
+         * @param {string} s1 The string containing the original characters (the 'from' key).
+         * @param {string} s2 The string containing the replacement characters (the 'to' key).
          * @returns {string} The encrypted string.
+         * @throws {Error} If s1 and s2 are not of the same length.
          */
-        function encryptString(str) {
-            let encrypted = '';
-            for (let i = 0; i < str.length; i++) {
-                const char = str[i];
-                const charCode = str.charCodeAt(i);
-
-                if (char >= 'a' && char <= 'z') {
-                    // Handle lowercase letters
-                    encrypted += (char === 'z') ? 'a' : String.fromCharCode(charCode + 1);
-                } else if (char >= 'A' && char <= 'Z') {
-                    // Handle uppercase letters
-                    encrypted += (char === 'Z') ? 'A' : String.fromCharCode(charCode + 1);
-                } else if (char >= '0' && char <= '9') {
-                    // Handle numbers
-                    encrypted += (char === '9') ? '0' : String.fromCharCode(charCode + 1);
-                } else if (charCode >= 0x4E00 && charCode <= 0x9FFF) {
-                    // Handle common CJK Unified Ideographs (Chinese characters)
-                    // We shift the Unicode code point by 1, wrapping around at the end of the block.
-                    encrypted += (charCode === 0x9FFF) ? String.fromCharCode(0x4E00) : String.fromCharCode(charCode + 1);
-                }
-                else {
-                    // Keep all other characters the same
-                    encrypted += char;
-                }
+        function encrypt(text, s1, s2) {
+            if (s1.length !== s2.length) {
+                throw new Error("Key strings s1 and s2 must have the same length.");
             }
-            return encrypted;
+
+            // Create a translation map from s1 characters to s2 characters
+            const encryptionMap = new Map();
+            for (let i = 0; i < s1.length; i++) {
+                encryptionMap.set(s1[i], s2[i]);
+            }
+
+            // Apply the translation by building a new string
+            let result = '';
+            for (const char of text) {
+                result += encryptionMap.get(char) || char;
+            }
+            return result;
         }
+
+        /**
+         * Decrypts a text string using a substitution cipher defined by two key strings.
+         *
+         * Each character in the input text that is found in s2 is replaced by the
+         * character at the same position in s1. Characters not in s2 are unchanged.
+         *
+         * For performance-critical applications, consider creating and caching the mapping
+         * Map object externally.
+         *
+         * @param {string} text The string to decrypt.
+         * @param {string} s1 The string containing the original characters (the 'to' key).
+         * @param {string} s2 The string containing the replacement characters (the 'from' key).
+         * @returns {string} The decrypted string.
+         * @throws {Error} If s1 and s2 are not of the same length.
+         */
+        function decrypt(text, s1, s2) {
+            if (s1.length !== s2.length) {
+                throw new Error("Key strings s1 and s2 must have the same length.");
+            }
+
+            // Create a translation map from s2 characters back to s1 characters
+            const decryptionMap = new Map();
+            for (let i = 0; i < s2.length; i++) {
+                decryptionMap.set(s2[i], s1[i]);
+            }
+
+            // Apply the translation by building a new string
+            let result = '';
+            for (const char of text) {
+                result += decryptionMap.get(char) || char;
+            }
+            return result;
+        }
+
 
         /**
          * Copies the given text to the user's clipboard.
@@ -118,7 +153,7 @@
         encryptBtn.addEventListener('click', () => {
             const originalText = textInput.value;
             if (originalText) {
-                const encryptedText = encryptString(originalText);
+                const encryptedText = encrypt(originalText, s1, s2);
                 outputText.value = encryptedText;
                 copyToClipboard(encryptedText);
             } else {
